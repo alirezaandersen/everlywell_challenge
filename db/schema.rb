@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_01_235930) do
+ActiveRecord::Schema.define(version: 2020_09_02_001554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,17 @@ ActiveRecord::Schema.define(version: 2020_09_01_235930) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "websites", force: :cascade do |t|
+    t.string "original_url", null: false
+    t.string "short_url"
+    t.bigint "user_id", null: false
+    t.text "header_values", default: [], null: false, array: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_websites_on_user_id"
+  end
+
   add_foreign_key "friendships", "users"
   add_foreign_key "friendships", "users", column: "friend_id"
+  add_foreign_key "websites", "users"
 end
