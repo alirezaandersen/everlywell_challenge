@@ -20,13 +20,18 @@ class UsersController < ApplicationController
   end
 
   def search_for_expert
-    #maybe a service?
+    @experts = ExpertFinder.new(search_params).find_experts_user
+    if @experts.present?
+      render :json, @experts.to_json, status: :ok
+    else
+      render json: @experts.errors, status: :unprocessable_entity
+    end
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, website_attributes: [:url])
+    params.require(:user).permit(:first_name, :last_name, website_attributes: [:original_url])
   end
 
   def search_params
