@@ -13,10 +13,22 @@ class FriendshipsController < ApplicationController
     end
   end
 
+  def mutual_friends
+    @mutual_friends = MutualFriendFinder.new(mutual_friends_params).mutual_friends
+    if @mutual_friends.present?
+      render json: @mutual_friends, status: :ok
+    else
+      render json: { error: 'Neither of you have a network' }.to_json, status: 422
+    end
+  end
 
   private
 
   def friendship_params
+    params.require(:friendship).permit(:user_id, :friend_id)
+  end
+
+  def mutual_friends_params
     params.require(:friendship).permit(:user_id, :friend_id)
   end
 end
